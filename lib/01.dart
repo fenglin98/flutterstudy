@@ -11,9 +11,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(scaffoldBackgroundColor: Colors.red),
-      home: Scaffold(),
+      // 基础组件
+      title: 'Flutter Demo', // 展示窗口内容 可不写
+      theme: ThemeData(scaffoldBackgroundColor: Colors.red), // 设置应用整体主题
+      home: Scaffold(), //展示窗口主体内容
     );
   }
 }

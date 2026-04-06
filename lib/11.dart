@@ -5,7 +5,40 @@ void main() {
   runApp(MyApp());
 }
 
-//  Flex 布局 Expanded 只能作为 Flex 的孩子（否则会报错)
+//  Flex 布局  row 和 column的结合体 ，
+// flex 的子组件使用 Expanded 和flexible控制空间分配
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Flutter Demo',
+//       home: Scaffold(
+//         appBar: AppBar(title: Text("App title")),
+//         body: Container(
+//           width: double.infinity,
+//           height: double.infinity,
+//           decoration: BoxDecoration(color: Colors.yellow),
+//           child: Flex(
+//             // direction: Axis.horizontal, // Axis 控制flex的排列方向 水平方向
+//             direction: Axis.vertical, // Axis 控制flex的排列方向 垂直方向
+//             children: [
+//               Expanded(
+//                 flex: 1,
+//                 child: Container(width: 50, color: Colors.red),
+//               ),
+//               Expanded(
+//                 flex: 2,
+//                 child: Container(width: 50, color: Colors.blue),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// 案例
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -13,44 +46,19 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       home: Scaffold(
         appBar: AppBar(title: Text("App title")),
-        body: Column(
-          children: <Widget>[
-            //Flex的两个子widget按1：2来占据水平空间
-            Flex(
-              direction: Axis.horizontal,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Container(height: 30.0, color: Colors.red),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Container(height: 30.0, color: Colors.green),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: SizedBox(
-                height: 100.0,
-                //Flex的三个子widget，在垂直方向按2：1：1来占用100像素的空间
-                child: Flex(
-                  direction: Axis.vertical,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 2,
-                      child: Container(height: 30.0, color: Colors.red),
-                    ),
-                    Spacer(flex: 1),
-                    Expanded(
-                      flex: 1,
-                      child: Container(height: 30.0, color: Colors.green),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(color: Colors.yellow),
+          child: Flex(
+            // direction: Axis.horizontal, // Axis 控制flex的排列方向 水平方向
+            direction: Axis.vertical, // Axis 控制flex的排列方向 垂直方向
+            children: [
+              Container(height: 100, color: Colors.red),
+              Expanded(child: Container(color: Colors.grey)), //中间撑满 上下固定
+              Container(height: 100, color: Colors.blue),
+            ],
+          ),
         ),
       ),
     );

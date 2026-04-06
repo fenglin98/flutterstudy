@@ -5,7 +5,7 @@ void main() {
   runApp(MyApp());
 }
 
-// setState
+// 状态更新 setState,  setState方法会造成build的重新执行
 
 // 创建有状态组件
 class MyApp extends StatefulWidget {

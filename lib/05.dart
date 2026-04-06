@@ -1,4 +1,4 @@
-// 交互事件
+// 交互事件  用户点击 滑动 触摸 等
 import 'package:flutter/material.dart';
 
 void main() {
@@ -37,15 +37,22 @@ class MyApp extends StatelessWidget {
         bottomNavigationBar: Container(
           // 底部
           height: 100,
-          child: Center(child: Text("这里底部")),
+          child: Center(
+            child: TextButton( // 部分组件自带点击事件onPressed
+              onPressed: () { // onPressed()
+                print("这里是底部");
+              },
+              child: Text("这里底部"),
+            ),
+          ),
         ),
         floatingActionButton: FloatingActionButton(
-          // 悬浮按钮
+          // 悬浮按钮 按钮自带点击事件
           backgroundColor: Colors.red,
           foregroundColor: Colors.black,
           onPressed: () {
             print("qqqqqqqqqqqqqqqqqqq");
-          }, // 按钮自带点击事件
+          },
           child: Icon(Icons.add),
         ),
       ),

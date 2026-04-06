@@ -63,9 +63,10 @@ void main() {
 // 1. createState 创建阶段
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
   @override
   State<MyApp> createState() {
-    // creat（创建阶段）
+    // creat（创建阶段）最先执行
     print("creat 1");
     return _MyAppState();
   }
@@ -74,7 +75,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    print("initState 1");
+    // 有且只执行一次
+    print("initState 2");
     super.initState();
     // initState（创建阶段）
     // ✅ 适合做：
@@ -86,13 +88,22 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void didChangeDependencies() {
-    print("didChangeDependencies 2"); //  依赖 全局状态（创建阶段）
+    // 当依赖的  InheritedWidget 更新时调用 可多次调用
+    print("didChangeDependencies 3"); //  依赖 全局状态（创建阶段）
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     // build 阶段
+    print("build 4 ");
     return const Placeholder();
+  }
+
+  @override
+  void didUpdateWidget(covariant MyApp oldWidget) {
+    // 父组件传入新配置时调用
+    print("didUpdateWidget 5 ");
+    super.didUpdateWidget(oldWidget);
   }
 }

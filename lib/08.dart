@@ -25,9 +25,9 @@ class MyApp extends StatelessWidget {
             child: Align(
               // Align 组件
               alignment: Alignment.centerRight, // 对齐方式
-              child: Icon(Icons.star, size: 20),
-              widthFactor: 2, // 宽度因子  align 组件的宽高等于 子组件以及该因子的乘积
-              heightFactor: 2, // 高度因子  align 组件的宽高等于 子组件以及该因子的乘积
+              child: Icon(Icons.star, size: 150, color: Colors.red),
+              widthFactor:1, // 宽度因子  align 组件的宽高等于 子组件以及该因子的乘积
+              heightFactor: 1, // 高度因子  align 组件的宽高等于 子组件以及该因子的乘积
             ),
           ),
         ),

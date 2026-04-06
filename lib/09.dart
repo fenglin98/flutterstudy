@@ -1,4 +1,5 @@
 // padding  组件 精确控制子组件在父组件的对其方式
+// EdgeInsetsGeometry 属性
 import 'package:flutter/material.dart';
 
 void main() {
