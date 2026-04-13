@@ -79,6 +79,8 @@ class _detailPageState extends State<detailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("详情页"), centerTitle: true),
+
+      // 2222222222222222222222222222222
       body: Container(
         width: double.infinity,
         height: 200,
