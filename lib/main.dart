@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'map.dart';
 
-// 命名路由 以及 路由传参
-// 注册路由表
 void main() {
-  runApp(
-    MaterialApp(
-      title: "标题",
-      initialRoute: "/list", // 初始路由
-      routes: {
-        // 注册路由表
-        "/list": (context) => listPage(),
-        "/detail": (context) => detailPage(),
-      },
-      home: listPage(),
-    ),
-  );
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: '门店地图',
+      debugShowCheckedModeBanner: false,
+      home: const MapPage(),
+    );
+  }
 }
 
 class listPage extends StatelessWidget {
