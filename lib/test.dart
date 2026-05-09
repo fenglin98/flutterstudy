@@ -1,22 +1,5 @@
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MF Tool',
-      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
-      home: const LoginPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -268,7 +251,104 @@ class _LoginPageState extends State<LoginPage> {
           style: TextStyle(fontSize: 12, color: Colors.grey[500]),
           textAlign: TextAlign.center,
         ),
+        const SizedBox(height: 40),
+        // FlutterToast 演示区域
+        _buildToastDemo(),
         const SizedBox(height: 20),
+      ],
+    );
+  }
+
+  Widget _buildToastDemo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'FlutterToast 演示',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ElevatedButton(
+              onPressed: () => Fluttertoast.showToast(msg: '默认 Toast'),
+              child: const Text('默认'),
+            ),
+            ElevatedButton(
+              onPressed: () => Fluttertoast.showToast(
+                msg: '顶部显示',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.TOP,
+                backgroundColor: Colors.black54,
+              ),
+              child: const Text('顶部'),
+            ),
+            ElevatedButton(
+              onPressed: () => Fluttertoast.showToast(
+                msg: '底部显示',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                backgroundColor: Colors.black54,
+              ),
+              child: const Text('底部'),
+            ),
+            ElevatedButton(
+              onPressed: () => Fluttertoast.showToast(
+                msg: '居中显示',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                backgroundColor: Colors.black54,
+              ),
+              child: const Text('居中'),
+            ),
+            ElevatedButton(
+              onPressed: () => Fluttertoast.showToast(
+                msg: '长消息',
+                toastLength: Toast.LENGTH_LONG,
+              ),
+              child: const Text('长消息'),
+            ),
+            ElevatedButton(
+              onPressed: () => Fluttertoast.showToast(
+                msg: '白色背景',
+                backgroundColor: Colors.white,
+                textColor: Colors.black,
+              ),
+              child: const Text('白色'),
+            ),
+            ElevatedButton(
+              onPressed: () => Fluttertoast.showToast(
+                msg: '红色背景',
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+              ),
+              child: const Text('红色'),
+            ),
+            ElevatedButton(
+              onPressed: () => Fluttertoast.showToast(
+                msg: '绿色背景',
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+              ),
+              child: const Text('绿色'),
+            ),
+ElevatedButton(
+              onPressed: () => Fluttertoast.showToast(
+                msg: '橙色背景',
+                backgroundColor: Colors.orange,
+                textColor: Colors.white,
+              ),
+              child: const Text('橙色'),
+            ),
+            ElevatedButton(
+              onPressed: () => Fluttertoast.cancel(),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+              child: const Text('关闭Toast'),
+            ),
+          ],
+        ),
       ],
     );
   }

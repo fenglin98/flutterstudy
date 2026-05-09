@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'test.dart';
 import 'map.dart';
 
 void main() {
@@ -11,9 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '门店地图',
+      title: 'MF Tool',
       debugShowCheckedModeBanner: false,
       home: const MapPage(),
+      // home: const LoginPage(),
     );
   }
 }
