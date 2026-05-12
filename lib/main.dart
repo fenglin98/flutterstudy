@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import 'test.dart';
 import 'map.dart';
 
@@ -11,11 +12,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MF Tool',
-      debugShowCheckedModeBanner: false,
-      home: const MapPage(),
-      // home: const LoginPage(),
+    return OKToast(
+      child: MaterialApp(
+        title: 'MF Tool',
+        debugShowCheckedModeBanner: false,
+        home: const MapPage(),
+        // home: const LoginPage(),
+      ),
     );
   }
 }

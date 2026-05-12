@@ -248,6 +248,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.1.2"
+  iconsax:
+    dependency: transitive
+    description:
+      name: iconsax
+      sha256: fb0144c61f41f3f8a385fadc27783ea9f5359670be885ed7f35cef32565d5228
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.8"
   leak_tracker:
     dependency: transitive
     description:
@@ -312,6 +320,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.0"
+  oktoast:
+    dependency: "direct main"
+    description:
+      name: oktoast
+      sha256: f1366c5c793ddfb8f55bc6fc3e45db43c45debf173b765fb4c5ec096cbdeb84a
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.4.0"
   path:
     dependency: transitive
     description:
@@ -381,6 +397,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.4.1"
+  t_overlay_notification:
+    dependency: "direct main"
+    description:
+      name: t_overlay_notification
+      sha256: "09547c2c7704f552f00864d80aa762cdbddbab58c1bc04e411cceaccb51d012b"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.4"
   term_glyph:
     dependency: transitive
     description:

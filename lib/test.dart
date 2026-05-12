@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:t_overlay_notification/t_overlay_notification.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,6 +14,12 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _accountController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _rememberAccount = false;
+  String _selectedRole = 'user';
+  final List<Map<String, String>> _roles = [
+    {'value': 'admin', 'label': '管理员'},
+    {'value': 'user', 'label': '普通用户'},
+    {'value': 'guest', 'label': '访客'},
+  ];
 
   @override
   void dispose() {
@@ -136,6 +144,26 @@ class _LoginPageState extends State<LoginPage> {
               vertical: 16,
             ),
           ),
+        ),
+        const SizedBox(height: 20),
+        // DropdownMenu 角色选择
+        DropdownMenu<String>(
+          initialSelection: _selectedRole,
+          label: const Text('角色'),
+          leadingIcon: const Icon(Icons.badge_outlined),
+          dropdownMenuEntries: _roles.map((r) {
+            return DropdownMenuEntry<String>(
+              value: r['value']!,
+              label: r['label']!,
+            );
+          }).toList(),
+          onSelected: (String? value) {
+            setState(() {
+              _selectedRole = value ?? 'user';
+            });
+            final label = _roles.firstWhere((r) => r['value'] == _selectedRole)['label'];
+            showToast('选择角色: $label', duration: const Duration(seconds: 1));
+          },
         ),
         const SizedBox(height: 20),
         // 密码输入框
@@ -346,6 +374,338 @@ ElevatedButton(
               onPressed: () => Fluttertoast.cancel(),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
               child: const Text('关闭Toast'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 32),
+        // OKToast 演示区域
+        _buildOKToastDemo(),
+        const SizedBox(height: 20),
+        // TOverlayNotification 演示区域
+        _buildTOverlayDemo(),
+      ],
+    );
+  }
+
+  Widget _buildOKToastDemo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'OKToast 演示',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
+        const Text('基础用法', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ElevatedButton(
+              onPressed: () => showToast('默认 OKToast'),
+              child: const Text('默认'),
+            ),
+            ElevatedButton(
+              onPressed: () => showToast('底部显示', position: ToastPosition.bottom),
+              child: const Text('底部'),
+            ),
+            ElevatedButton(
+              onPressed: () => showToast('顶部显示', position: ToastPosition.top),
+              child: const Text('顶部'),
+            ),
+            ElevatedButton(
+              onPressed: () => showToast('居中显示', position: ToastPosition.center),
+              child: const Text('居中'),
+            ),
+            ElevatedButton(
+              onPressed: () => showToast('3秒后消失', duration: const Duration(seconds: 3)),
+              child: const Text('3秒'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        const Text('自定义样式 (使用 showToastWidget)', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _buildOKToastColorBtn('红色', Colors.red),
+            _buildOKToastColorBtn('绿色', Colors.green),
+            _buildOKToastColorBtn('蓝色', Colors.blue),
+            _buildOKToastColorBtn('橙色', Colors.orange),
+            _buildOKToastColorBtn('紫色', Colors.purple),
+          ],
+        ),
+        const SizedBox(height: 16),
+        const Text('带图标', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _buildOKToastIconBtn('操作成功', Icons.check_circle, Colors.green),
+            _buildOKToastIconBtn('出错了', Icons.error, Colors.red),
+            _buildOKToastIconBtn('警告信息', Icons.warning, Colors.orange),
+            _buildOKToastIconBtn('提示信息', Icons.info, Colors.blue),
+          ],
+        ),
+        const SizedBox(height: 16),
+        const Text('圆角 Toast', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ElevatedButton(
+              onPressed: () => showToastWidget(
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.black87,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text('大圆角Toast', style: TextStyle(color: Colors.white)),
+                ),
+                duration: const Duration(seconds: 2),
+              ),
+              child: const Text('大圆角'),
+            ),
+            ElevatedButton(
+              onPressed: () => showToastWidget(
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.black87,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text('小圆角Toast', style: TextStyle(color: Colors.white)),
+                ),
+                duration: const Duration(seconds: 2),
+              ),
+              child: const Text('小圆角'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        const Text('长文本', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ElevatedButton(
+              onPressed: () => showToast(
+                '这是一条比较长的消息，用于测试长文本的显示效果和布局适应性。',
+                duration: const Duration(seconds: 3),
+              ),
+              child: const Text('长文本测试'),
+            ),
+            ElevatedButton(
+              onPressed: () => showToastWidget(
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.black87,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    '多行文本测试\n第二行内容\n第三行内容',
+                    style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                duration: const Duration(seconds: 3),
+              ),
+              child: const Text('多行文本'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        const Text('控制', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ElevatedButton(
+              onPressed: () => dismissAllToast(),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+              child: const Text('dismissAllToast'),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildOKToastColorBtn(String text, Color color) {
+    return ElevatedButton(
+      onPressed: () => showToastWidget(
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(text, style: const TextStyle(color: Colors.white)),
+        ),
+        duration: const Duration(seconds: 2),
+      ),
+      child: Text(text),
+    );
+  }
+
+  Widget _buildOKToastIconBtn(String text, IconData icon, Color color) {
+    return ElevatedButton(
+      onPressed: () => showToastWidget(
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, color: Colors.white, size: 20),
+              const SizedBox(width: 8),
+              Text(text, style: const TextStyle(color: Colors.white)),
+            ],
+          ),
+        ),
+        duration: const Duration(seconds: 2),
+      ),
+      child: Text(text),
+    );
+  }
+
+  Widget _buildTOverlayDemo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'TOverlayNotification 演示',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
+        const Text('通知类型', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ElevatedButton(
+              onPressed: () => TNotificationOverlay.success(
+                context: context,
+                title: '成功',
+                subTitle: '操作已成功完成',
+              ),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+              child: const Text('成功'),
+            ),
+            ElevatedButton(
+              onPressed: () => TNotificationOverlay.error(
+                context: context,
+                title: '错误',
+                subTitle: '发生了错误，请重试',
+              ),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: const Text('错误'),
+            ),
+            ElevatedButton(
+              onPressed: () => TNotificationOverlay.warning(
+                context: context,
+                title: '警告',
+                subTitle: '请注意，这是一条警告信息',
+              ),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+              child: const Text('警告'),
+            ),
+            ElevatedButton(
+              onPressed: () => TNotificationOverlay.info(
+                context: context,
+                title: '信息',
+                subTitle: '这是一条提示信息',
+              ),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+              child: const Text('信息'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        const Text('通用显示', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ElevatedButton(
+              onPressed: () => TNotificationOverlay.show(
+                context: context,
+                title: '自定义标题',
+                subTitle: '这是自定义消息内容',
+                type: NotificationType.success,
+              ),
+              child: const Text('自定义成功'),
+            ),
+            ElevatedButton(
+              onPressed: () => TNotificationOverlay.show(
+                context: context,
+                title: '紫色主题',
+                subTitle: '使用紫色通知类型',
+                type: NotificationType.info,
+              ),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
+              child: const Text('紫色主题'),
+            ),
+            ElevatedButton(
+              onPressed: () => TNotificationOverlay.show(
+                context: context,
+                title: '自定义颜色',
+                subTitle: '蓝色背景白色文字',
+                type: NotificationType.info,
+                backgroundColor: Colors.blue,
+                titleColor: Colors.white,
+                messageColor: Colors.white,
+              ),
+              child: const Text('自定义样式'),
+            ),
+            ElevatedButton(
+              onPressed: () => TNotificationOverlay.show(
+                context: context,
+                title: '置顶通知',
+                subTitle: '3秒后自动关闭',
+                type: NotificationType.info,
+                position: NotificationPosition.topRight,
+              ),
+              child: const Text('顶部右侧'),
+            ),
+            ElevatedButton(
+              onPressed: () => TNotificationOverlay.show(
+                context: context,
+                title: '底部通知',
+                subTitle: '显示在底部居中',
+                type: NotificationType.success,
+                position: NotificationPosition.bottomCenter,
+              ),
+              child: const Text('底部居中'),
+            ),
+            ElevatedButton(
+              onPressed: () => TNotificationOverlay.show(
+                context: context,
+                title: '持久通知',
+                subTitle: '点击关闭按钮移除',
+                type: NotificationType.warning,
+                sticky: true,
+              ),
+              child: const Text('持久(Sticky)'),
+            ),
+            ElevatedButton(
+              onPressed: () => TNotificationOverlay.closeAll(),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+              child: const Text('关闭全部'),
             ),
           ],
         ),

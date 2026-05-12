@@ -1,50 +1,123 @@
-# 待办事项
+# POI 搜索 + 详情功能实现计划
 
-## 进行中
+## Context
 
-## 已完成
+在现有地图应用中添加 POI（兴趣点）搜索和详情查看功能。用户可以搜索周边兴趣点（如餐厅、酒店、加油站等），点击查看 POI 详细信息。
 
-- [x] 固定地图初始位置经纬度为 (113.88308, 22.55329)
+**技术选型**：Google Places API（项目已使用 google_maps_flutter）
 
-## 计划中
+---
 
-### 地图圈选门店功能
+## 实现方案
 
-**功能描述：** 用户在地图上通过交互划一个区域（圆形/多边形/手绘），自动选中圈中的所有门店并高亮显示
+### 1. 数据模型
 
-#### 方案一：圆形圈选
+新建 `lib/models/poi.dart`：
 
-- **核心思路：** 用户长按设置圆心，拖动设置半径，Haversine 公式判断门店是否在圆内
-- **新增文件：**
-  - `lib/components/mapPage/circle_selection_controller.dart`
-  - `lib/components/mapPage/selection_mode_bar.dart`
-  - `lib/utils/geometry_utils.dart`
-- **修改文件：** `lib/pages/map/map_page.dart`
-- **优点：** 实现简单，交互直观，Haversine 已有实现
-- **缺点：** 仅支持圆形，无法贴合不规则区域
+- `PoiCategory` 枚举（餐饮/酒店/加油站/银行/购物/医院/学校/景点）
+- `Poi` 数据类（id/name/address/LatLng/category/phone/rating/photoUrl）
 
-#### 方案二：多边形圈选
+### 2. POI 服务
 
-- **核心思路：** 用户点击添加顶点形成封闭多边形，射线法判断门店是否在多边形内
-- **新增文件：**
-  - `lib/components/mapPage/polygon_selection_controller.dart`
-  - `lib/utils/geometry_utils.dart`
-- **修改文件：** `lib/pages/map/map_page.dart`
-- **优点：** 支持任意形状区域，精确选择
-- **缺点：** 实现复杂度较高
+新建 `lib/services/poi_service.dart`：
 
-#### 方案三：自由手绘圈选
+- 封装 Google Places API（Nearby Search + Text Search + Details）
+- 使用现有 `Dio` HTTP 客户端
 
-- **核心思路：** 用户手指滑动绘制任意形状轨迹，Douglas-Peucker 简化轨迹，射线法判断门店是否在区域内
-- **新增文件：**
-  - `lib/components/mapPage/freehand_selection_controller.dart`
-  - `lib/utils/geometry_utils.dart`
-- **修改文件：** `lib/pages/map/map_page.dart`
-- **优点：** 最灵活，用户可绘制任意形状，交互直观
-- **缺点：** 实现复杂度最高，需要简化算法处理大量轨迹点
+新建 `lib/services/api_keys.dart`：
 
-#### 关键文件
+- 管理 Google Maps API Key 配置
 
-- `lib/pages/map/map_page.dart` - 地图页面主文件
-- `lib/viewmodels/store_model.dart` - NearbyStore 含 latitude/longitude
-- `lib/utils/map_utils.dart` - 已有 `calculateDistance()` Haversine 实现
+### 3. UI 组件
+
+| 组件 | 文件 | 说明 |
+|------|------|------|
+| POI分类选择栏 | `lib/widgets/poi_category_bar.dart` | 横向滚动分类快捷选择 |
+| POI搜索面板 | `lib/widgets/poi_search_panel.dart` | 搜索框+分类栏+结果列表 |
+| POI搜索结果项 | `lib/widgets/poi_search_result_item.dart` | 单条POI结果展示 |
+| POI详情底页 | `lib/widgets/poi_detail_sheet.dart` | BottomSheet 展示POI详情 |
+
+### 4. 地图集成
+
+修改 `lib/map.dart`：
+
+- 添加 POI 搜索面板展开/收起逻辑
+- 在地图上显示 POI 标记（蓝色，区别于门店红色/黄色）
+- 点击 POI 标记弹出详情 BottomSheet
+
+修改 `lib/widgets/map_toolbar.dart`：
+
+- 搜索按钮触发 POI 搜索面板展开
+
+---
+
+## 关键文件
+
+| 操作 | 文件路径 |
+|------|----------|
+| 新建 | `lib/models/poi.dart` |
+| 新建 | `lib/services/poi_service.dart` |
+| 新建 | `lib/services/api_keys.dart` |
+| 新建 | `lib/widgets/poi_category_bar.dart` |
+| 新建 | `lib/widgets/poi_search_panel.dart` |
+| 新建 | `lib/widgets/poi_search_result_item.dart` |
+| 新建 | `lib/widgets/poi_detail_sheet.dart` |
+| 修改 | `lib/map.dart` |
+| 修改 | `lib/widgets/map_toolbar.dart` |
+
+**参考文件**（复用现有代码）：
+
+- `lib/models/store.dart` - POI 模型设计参考
+- `lib/widgets/search_bar_widget.dart` - 搜索组件参考
+- `lib/widgets/store_info_window.dart` - 详情卡片样式参考
+
+---
+
+## Google Places API 使用
+
+### API Endpoint
+
+```
+https://maps.googleapis.com/maps/api/place/
+```
+
+### 需要启用的 API
+
+1. **Places API** - POI 搜索和详情
+2. **Geocoding API** - 地址解析（如需要）
+
+### API Key 配置
+
+在 `lib/services/api_keys.dart` 中管理，用户需提供 Google Maps API Key 并确保在 Google Cloud Console 启用了 Places API。
+
+---
+
+## 分步实施
+
+### 阶段一：数据模型和服务
+
+1. 创建 `lib/models/poi.dart`
+2. 创建 `lib/services/api_keys.dart`
+3. 创建 `lib/services/poi_service.dart`
+
+### 阶段二：UI 组件
+
+4. 创建 `lib/widgets/poi_category_bar.dart`
+5. 创建 `lib/widgets/poi_search_result_item.dart`
+6. 创建 `lib/widgets/poi_search_panel.dart`
+7. 创建 `lib/widgets/poi_detail_sheet.dart`
+
+### 阶段三：地图集成
+
+8. 修改 `lib/widgets/map_toolbar.dart` 支持搜索面板展开
+9. 修改 `lib/map.dart` 集成 POI 搜索流程和标记显示
+
+---
+
+## 验证方式
+
+1. **POI 搜索**：在搜索框输入"restaurant"，底部列表展示 POI 结果
+2. **分类搜索**：点击"餐饮"分类，搜索周边餐饮 POI
+3. **地图标记**：点击 POI 列表项，地图上出现蓝色 POI 标记并自动聚焦
+4. **详情查看**：点击地图 POI 标记，弹出 BottomSheet 显示 POI 详情（名称/地址/电话/评分）
+5. **清除操作**：点击清除按钮，POI 标记和搜索面板消失，恢复普通地图模式
